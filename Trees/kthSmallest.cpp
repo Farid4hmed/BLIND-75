@@ -1,20 +1,22 @@
 //Intuition - Array obtained by inorder traversal of a BST is sorted
 class Solution {
 public:
-    vector<int> arr;
-    int kthSmallest(TreeNode* root, int k) {
-        findArr(root);
-        for(int i=0; i<arr.size(); i++){
-            if(i+1 == k)return arr[i];
-        }
-        return -1;
-    }
-     void findArr(TreeNode* root){
-        if(root == NULL)return;
-        if(root->left)findArr(root->left);
-        arr.push_back(root->val);
-        if(root->right)findArr(root->right);
+    int kthSmallest(TreeNode* root, int &k) 
+    {
+        if(root==NULL) return -1;
+        
+        int left=kthSmallest(root->left,k);          // left recursive call
+        
+        if(left!=-1) return left;                      // if we get answer from left call than return it
+        k--;
+        if(k==0) return root->val;                 // this is kth smallest element
+         
+        int right=kthSmallest(root->right,k);     // right recursive call
+        
+        if(right!=-1) return right;                   // if we get answert from right call than return it
+        
+        return -1;                                 // return -1 if we not get answer from this call
     }
 };
-//TC - O(n)
-//SC - O(n)
+//TC - O(height + k)
+//SC - O(1)
